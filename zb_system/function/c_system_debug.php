@@ -231,6 +231,10 @@ function Debug_Shutdown_Handler() {
     }
 }
 
+function Debug_DoNothing () {
+    return false;
+}
+
 /**
  * Class ZBlogException
  *
@@ -308,6 +312,7 @@ class ZBlogException {
      * 设定错误处理函数
      */
     public static function SetErrorHook() {
+        if (IS_CLI) return;
         set_error_handler('Debug_Error_Handler');
         set_exception_handler('Debug_Exception_Handler');
         register_shutdown_function('Debug_Shutdown_Handler');
@@ -317,9 +322,9 @@ class ZBlogException {
      * 清除注册的错误处理程序
      */
     public static function ClearErrorHook() {
-        set_error_handler(create_function('', 'return false;'));
-        set_exception_handler(create_function('', 'return false;'));
-        register_shutdown_function(create_function('', 'return false;'));
+        set_error_handler('Debug_DoNothing');
+        set_exception_handler('Debug_DoNothing');
+        register_shutdown_function('Debug_DoNothing');
     }
 
     /**
