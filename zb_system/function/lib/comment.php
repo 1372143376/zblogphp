@@ -5,8 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/Comment 类库
  */
-class Comment extends Base
-{
+class Comment extends Base {
 
     /**
      * @var bool 是否丢弃，如通过插件等判断为垃圾评论则标记为true
@@ -20,8 +19,7 @@ class Comment extends Base
     /**
      * 构造函数
      */
-    public function __construct()
-    {
+    public function __construct() {
         global $zbp;
         parent::__construct($zbp->table['Comment'], $zbp->datainfo['Comment'], __CLASS__);
     }
@@ -32,14 +30,10 @@ class Comment extends Base
      * @param mixed $args 参数
      * @return mixed
      */
-    public function __call($method, $args)
-    {
+    public function __call($method, $args) {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Call'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                return $fpreturn;
-            }
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
     }
 
@@ -48,8 +42,7 @@ class Comment extends Base
      * @param int $parentid 父评论ID
      * @return array|int|mixed
      */
-    public static function GetRootID($parentid)
-    {
+    public static function GetRootID($parentid) {
         global $zbp;
         if ($parentid == 0) {
             return 0;
@@ -68,8 +61,7 @@ class Comment extends Base
      * @param string $s 时间格式
      * @return bool|string
      */
-    public function Time($s = 'Y-m-d H:i:s')
-    {
+    public function Time($s = 'Y-m-d H:i:s') {
         return date($s, (int) $this->PostTime);
     }
 
@@ -78,8 +70,7 @@ class Comment extends Base
      * @param $value
      * @return null
      */
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         global $zbp;
         if ($name == 'Author') {
             return null;
@@ -100,8 +91,7 @@ class Comment extends Base
      * @param $name
      * @return array|int|Member|mixed
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         global $zbp;
         if ($name == 'Author') {
             $m = $zbp->GetMemberByID($this->AuthorID);
@@ -140,15 +130,11 @@ class Comment extends Base
      * 保存评论数据
      * @return bool
      */
-    public function Save()
-    {
+    public function Save() {
         global $zbp;
         foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                return $fpreturn;
-            }
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Save();
@@ -157,19 +143,13 @@ class Comment extends Base
     /**
      * @return bool
      */
-    public function Del()
-    {
+    public function Del() {
         global $zbp;
-        if ($this->ID >0) {
-            unset($zbp->comments[$this->ID]);
-        }
+        if ($this->ID >0) unset($zbp->comments[$this->ID]);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-                return $fpreturn;
-            }
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {$fpsignal = PLUGIN_EXITSIGNAL_NONE;return $fpreturn;}
         }
 
         return parent::Del();
@@ -180,8 +160,7 @@ class Comment extends Base
      * @param object $object
      * @return int 评论深度
      */
-    private function GetDeep(&$object, $deep = 0)
-    {
+    private function GetDeep(&$object, $deep = 0) {
         global $zbp;
         if ($object->ParentID == 0 || $object->ParentID == $object->ID) {
             return $deep;

@@ -5,8 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Base
-{
+class Base {
 
     /**
      * @var string 数据表
@@ -38,8 +37,7 @@ class Base
      * @param string $table 数据表
      * @param array $datainfo 数据表结构信息
      */
-    public function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null)
-    {
+    public function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null) {
         if ($db !== null && is_object($db)) {
             $this->db = &$db;
         } else {
@@ -68,8 +66,7 @@ class Base
      * @param $name
      * @param $value
      */
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         $this->data[$name] = $value;
     }
 
@@ -77,8 +74,7 @@ class Base
      * @param $name
      * @return mixed
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         return $this->data[$name];
     }
 
@@ -86,16 +82,14 @@ class Base
      * @param $name
      * @return bool
      */
-    public function __isset($name)
-    {
+    public function __isset($name) {
         return isset($this->data[$name]);
     }
 
     /**
      * @param $name
      */
-    public function __unset($name)
-    {
+    public function __unset($name) {
         unset($this->data[$name]);
     }
 
@@ -103,8 +97,7 @@ class Base
      * 获取数据库数据
      * @return array
      */
-    public function GetData()
-    {
+    public function GetData() {
         return $this->data;
     }
 
@@ -112,8 +105,7 @@ class Base
      * 获取数据表
      * @return string
      */
-    public function GetTable()
-    {
+    public function GetTable() {
         return $this->table;
     }
 
@@ -121,8 +113,7 @@ class Base
      * 获取表结构
      * @return array
      */
-    public function GetDataInfo()
-    {
+    public function GetDataInfo() {
         return $this->datainfo;
     }
 
@@ -131,8 +122,7 @@ class Base
      * @param int $id 指定ID
      * @return bool
      */
-    public function LoadInfoByID($id)
-    {
+    public function LoadInfoByID($id) {
         $id = (int) $id;
         $id_field = reset($this->datainfo);
         $id_field = $id_field[0];
@@ -153,8 +143,7 @@ class Base
      * @param array $array 待查找数组
      * @return bool
      */
-    public function LoadInfoByAssoc($array)
-    {
+    public function LoadInfoByAssoc($array) {
         global $bloghost;
         foreach ($this->datainfo as $key => $value) {
             if (!isset($array[$value[0]])) {
@@ -187,8 +176,7 @@ class Base
      * @param string $field_value 数据值
      * @return bool
      */
-    public function LoadInfoByField($field, $field_value)
-    {
+    public function LoadInfoByField($field, $field_value) {
         global $table, $datainfo;
         $field_table = array_flip($table);
         $field_table = $field_table[$this->table];
@@ -210,8 +198,7 @@ class Base
      * @param $array
      * @return bool
      */
-    public function LoadInfoByArray($array)
-    {
+    public function LoadInfoByArray($array) {
         global $bloghost;
         $i = 0;
         foreach ($this->datainfo as $key => $value) {
@@ -227,6 +214,7 @@ class Base
                     if (isset($this->data['Meta'])) {
                         $this->Metas->Unserialize($this->data['Meta']);
                     }
+
                 } else {
                     $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $array[$i]);
                 }
@@ -246,8 +234,7 @@ class Base
      * 保存数据
      * @return bool
      */
-    public function Save()
-    {
+    public function Save() {
         global $bloghost;
         if (isset($this->data['Meta'])) {
             $this->data['Meta'] = $this->Metas->Serialize();
@@ -296,6 +283,7 @@ class Base
             $sql = $this->db->sql->Insert($this->table, $keyvalue);
             $this->$id_name = $this->db->Insert($sql);
         } else {
+
             $sql = $this->db->sql->Update($this->table, $keyvalue, array(array('=', $id_field, $this->$id_name)));
 
             return $this->db->Update($sql);
@@ -308,8 +296,7 @@ class Base
      * 删除数据
      * @return bool
      */
-    public function Del()
-    {
+    public function Del() {
         $id_field = reset($this->datainfo);
         $id_name = key($this->datainfo);
         $id_field = $id_field[0];
@@ -323,8 +310,8 @@ class Base
      * 将数据用JSON格式输出
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return (string) json_encode($this->data);
     }
+
 }

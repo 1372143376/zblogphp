@@ -5,8 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase/Dbpdo_PgSQL 类库
  */
-class Dbpdo_PgSQL implements iDataBase
-{
+class Dbpdo_PgSQL implements iDataBase {
 
     public $type = 'pgsql';
     public $version = '';
@@ -27,8 +26,7 @@ class Dbpdo_PgSQL implements iDataBase
     /**
      * 构造函数，实例化$sql参数
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->sql = new DbSql($this);
     }
 
@@ -36,8 +34,7 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $s
      * @return string
      */
-    public function EscapeString($s)
-    {
+    public function EscapeString($s) {
         return str_ireplace("'", "''", $s);
     }
 
@@ -55,8 +52,7 @@ class Dbpdo_PgSQL implements iDataBase
      *                  )
      * @return bool
      */
-    public function Open($array)
-    {
+    public function Open($array) {
 
         $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
         if (false == $array[5]) {
@@ -73,8 +69,7 @@ class Dbpdo_PgSQL implements iDataBase
     /**
      * 关闭数据库连接
      */
-    public function Close()
-    {
+    public function Close() {
         $this->db = null;
     }
 
@@ -82,12 +77,8 @@ class Dbpdo_PgSQL implements iDataBase
      * 执行多行SQL语句
      * @param $s
      */
-    public function QueryMulit($s)
-    {
-        return $this->QueryMulti($s);
-    }//错别字函数，历史原因保留下来
-    public function QueryMulti($s)
-    {
+    public function QueryMulit($s) {return $this->QueryMulti($s);}//错别字函数，历史原因保留下来
+    public function QueryMulti($s) {
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
@@ -102,8 +93,7 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $query
      * @return array
      */
-    public function Query($query)
-    {
+    public function Query($query) {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
@@ -113,14 +103,14 @@ class Dbpdo_PgSQL implements iDataBase
         } else {
             return array($results);
         }
+
     }
 
     /**
      * @param $query
      * @return bool|mysqli_result
      */
-    public function Update($query)
-    {
+    public function Update($query) {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         return $this->db->query($this->sql->Filter($query));
     }
@@ -129,8 +119,7 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $query
      * @return bool|mysqli_result
      */
-    public function Delete($query)
-    {
+    public function Delete($query) {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         return $this->db->query($this->sql->Filter($query));
     }
@@ -139,8 +128,7 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $query
      * @return int
      */
-    public function Insert($query)
-    {
+    public function Insert($query) {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->query($this->sql->Filter($query));
         $seq = explode(' ', $query, 4);
@@ -154,16 +142,14 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $table
      * @param $datainfo
      */
-    public function CreateTable($table, $datainfo)
-    {
+    public function CreateTable($table, $datainfo) {
         $this->QueryMulit($this->sql->CreateTable($table, $datainfo));
     }
 
     /**
      * @param $table
      */
-    public function DelTable($table)
-    {
+    public function DelTable($table) {
         $this->QueryMulit($this->sql->DelTable($table));
     }
 
@@ -171,8 +157,7 @@ class Dbpdo_PgSQL implements iDataBase
      * @param $table
      * @return bool
      */
-    public function ExistTable($table)
-    {
+    public function ExistTable($table) {
 
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {

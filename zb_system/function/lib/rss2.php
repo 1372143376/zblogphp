@@ -5,8 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage ClassLib 类库
  */
-class Rss2
-{
+class Rss2 {
 
     private $channel;
     /**
@@ -20,8 +19,7 @@ class Rss2
      * @param string $link
      * @param string $description
      */
-    public function __construct($title, $link, $description)
-    {
+    public function __construct($title, $link, $description) {
 
         $this->xml .= '<rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">';
         $this->xml .= '<channel>';
@@ -39,8 +37,7 @@ class Rss2
      * @param $value
      * @return string
      */
-    public function createElement($name, $value)
-    {
+    public function createElement($name, $value) {
         return '<' . $name . '>' . htmlspecialchars($value) . '</' . $name . '>';
     }
 
@@ -51,8 +48,7 @@ class Rss2
      * @param $description
      * @param $date
      */
-    public function addItem($title, $link, $description, $date)
-    {
+    public function addItem($title, $link, $description, $date) {
         if (substr($this->xml, -6) == '</rss>') {
             return;
         }
@@ -69,12 +65,12 @@ class Rss2
      * 返回xml格式的RSS文档
      * @return string
      */
-    public function saveXML()
-    {
+    public function saveXML() {
         if (substr($this->xml, -6) !== '</rss>') {
             $this->xml .= '</channel></rss>';
         }
 
         return $this->xml;
     }
+
 }

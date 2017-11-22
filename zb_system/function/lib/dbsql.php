@@ -5,8 +5,7 @@
  * @package Z-BlogPHP
  * @subpackage Interface/DataBase 类库
  */
-interface iDataBase
-{
+interface iDataBase {
 
     public function Open($array);
 
@@ -29,6 +28,7 @@ interface iDataBase
     public function DelTable($table);
 
     public function ExistTable($table);
+
 }
 
 /**
@@ -36,8 +36,7 @@ interface iDataBase
  * @package Z-BlogPHP
  * @subpackage ClassLib/DataBase
  */
-class DbSql
-{
+class DbSql {
     /**
      * @var null 数据库连接实例
      */
@@ -51,8 +50,7 @@ class DbSql
      */
     private $sql = null;
 
-    public function __construct(&$db = null)
-    {
+    public function __construct(&$db = null) {
         $this->db = &$db;
         $this->dbclass = get_class($this->db);
         $this->sql = 'sql' . $this->db->type;
@@ -62,14 +60,12 @@ class DbSql
      * @param string $
      * @return string
      */
-    public function ReplacePre(&$s)
-    {
+    public function ReplacePre(&$s) {
         $s = str_replace('%pre%', $this->db->dbpre, $s);
         return $s;
     }
 
-    public function get()
-    {
+    public function get() {
         $sql = new $this->sql($this->db);
         return $sql;
     }
@@ -79,8 +75,7 @@ class DbSql
      * @param string $table
      * @return string
      */
-    public function DelTable($table)
-    {
+    public function DelTable($table) {
         
         return $this->get()->drop("$table")->sql;
     }
@@ -91,8 +86,7 @@ class DbSql
      * @param string $dbname
      * @return string
      */
-    public function ExistTable($table, $dbname = '')
-    {
+    public function ExistTable($table, $dbname = '') {
 
         return $this->get()->exist($table, $dbname)->sql;
     }
@@ -103,8 +97,7 @@ class DbSql
      * @param array $datainfo
      * @return string
      */
-    public function CreateTable($table, $datainfo, $engine = null)
-    {
+    public function CreateTable($table, $datainfo, $engine = null) {
 
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
@@ -113,6 +106,7 @@ class DbSql
         }
 
         return $sql->sql;
+
     }
 
 
@@ -126,8 +120,7 @@ class DbSql
      * @param array|null $option
      * @return string 返回构造的语句
      */
-    public function Select($table, $select = null, $where = null, $order = null, $limit = null, $option = null)
-    {
+    public function Select($table, $select = null, $where = null, $order = null, $limit = null, $option = null) {
         if (!is_array($option)) {
             $option = array();
         }
@@ -141,6 +134,7 @@ class DbSql
                 } else {
                     $sql->count($value);
                 }
+                
             }
         } else {
             if (!is_array($select)) {
@@ -172,8 +166,7 @@ class DbSql
      * @param null $option
      * @return string 返回构造的语句
      */
-    public function Count($table, $count, $where = null, $option = null)
-    {
+    public function Count($table, $count, $where = null, $option = null) {
         if (!is_array($option)) {
             $option = array('select2count' => true);
         }
@@ -189,8 +182,7 @@ class DbSql
      * @param array|null $option
      * @return string 返回构造的语句
      */
-    public function Update($table, $keyvalue, $where, $option = null)
-    {
+    public function Update($table, $keyvalue, $where, $option = null) {
         return $this->get()->update($table)->data($keyvalue)->where($where)->option($option)->sql;
     }
 
@@ -200,8 +192,7 @@ class DbSql
      * @param string $keyvalue
      * @return string 返回构造的语句
      */
-    public function Insert($table, $keyvalue)
-    {
+    public function Insert($table, $keyvalue) {
 
         return $this->get()->insert($this->db)->insert($table)->data($keyvalue)->sql;
     }
@@ -213,8 +204,7 @@ class DbSql
      * @param array|null $option
      * @return string 返回构造的语句
      */
-    public function Delete($table, $where, $option = null)
-    {
+    public function Delete($table, $where, $option = null) {
 
         return $this->get()->delete($this->db)->delete($table)->where($where)->option($option)->sql;
     }
@@ -224,8 +214,7 @@ class DbSql
      * @param $sql
      * @return mixed
      */
-    public function Filter($sql)
-    {
+    public function Filter($sql) {
         $_SERVER['_query_count'] = $_SERVER['_query_count'] + 1;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DbSql_Filter'] as $fpname => &$fpsignal) {
@@ -241,8 +230,7 @@ class DbSql
      * @return mixed
      */
     private $_explort_db = null;
-    public function Export($table, $keyvalue, $type = 'mysql')
-    {
+    public function Export($table, $keyvalue, $type = 'mysql') {
 
         if ($type == 'mysql' && $this->_explort_db === null) {
             $this->_explort_db = new DbMySQL;
