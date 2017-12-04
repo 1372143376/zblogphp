@@ -301,7 +301,7 @@ function ViewIndex() {
 
     if (IS_IIS && isset($_GET['rewrite']) && isset($_GET['full_uri'])) {
         //对iis+rewirt进行修正
-        $uri_array= parse_url($_GET['full_uri']));
+        $uri_array = parse_url($_GET['full_uri']);
         if(isset($uri_array['query'])){
             parse_str($uri_array['query'],$uri_query);
             $_GET = $_GET + $uri_query;
