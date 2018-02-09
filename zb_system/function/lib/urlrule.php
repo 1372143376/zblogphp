@@ -187,7 +187,7 @@ class UrlRule {
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
             }
         }
-        if ($type == 'page' || $type == 'article') {
+        if ($type == 'page' || $type == 'article' || $type == 'post') {
             if (strpos($url, '%id%') !== false) {
                 $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             }
@@ -406,7 +406,7 @@ class UrlRule {
                 $url = str_replace('%alias%', '([^\./_]+?)', $url);
             }
         }
-        if ($type == 'page' || $type == 'article') {
+        if ($type == 'page' || $type == 'article' || $type == 'post') {
             if (strpos($url, '%id%') !== false) {
                 $url = $url . '(\?.*)? ' . $zbp->cookiespath . 'index\.php\?id=$1&rewrite=1';
                 $url = str_replace('%id%', '([0-9]+)', $url);
